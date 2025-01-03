@@ -1,0 +1,6 @@
+@FrodX.OrderProcessing.WebAPI_HostAddress = http://localhost:5111
+
+GET {{FrodX.OrderProcessing.WebAPI_HostAddress}}/orders/
+Accept: application/json
+
+###

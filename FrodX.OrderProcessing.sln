@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrodX.OrderProcessing.Worker", "src\FrodX.OrderProcessing.Worker\FrodX.OrderProcessing.Worker.csproj", "{4D8380CD-23A9-48E6-A49D-6923C5B0AA8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrodX.OrderProcessing.EFCore", "src\FrodX.OrderProcessing.EFCore\FrodX.OrderProcessing.EFCore.csproj", "{BD4B5038-C588-4DE8-A31E-949D6FDF5631}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrodX.OrderProcessing.Infrastructure", "src\FrodX.OrderProcessing.Infrastructure\FrodX.OrderProcessing.Infrastructure.csproj", "{F031EFB9-F07C-448C-A955-C36DE99B6A7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrodX.OrderProcessing.WebAPI", "src\FrodX.OrderProcessing.WebAPI\FrodX.OrderProcessing.WebAPI.csproj", "{7FAC331B-0CC2-463A-A0F3-E3D590F21182}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D8380CD-23A9-48E6-A49D-6923C5B0AA8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D8380CD-23A9-48E6-A49D-6923C5B0AA8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D8380CD-23A9-48E6-A49D-6923C5B0AA8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D8380CD-23A9-48E6-A49D-6923C5B0AA8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD4B5038-C588-4DE8-A31E-949D6FDF5631}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD4B5038-C588-4DE8-A31E-949D6FDF5631}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD4B5038-C588-4DE8-A31E-949D6FDF5631}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD4B5038-C588-4DE8-A31E-949D6FDF5631}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F031EFB9-F07C-448C-A955-C36DE99B6A7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F031EFB9-F07C-448C-A955-C36DE99B6A7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F031EFB9-F07C-448C-A955-C36DE99B6A7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F031EFB9-F07C-448C-A955-C36DE99B6A7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FAC331B-0CC2-463A-A0F3-E3D590F21182}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FAC331B-0CC2-463A-A0F3-E3D590F21182}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FAC331B-0CC2-463A-A0F3-E3D590F21182}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FAC331B-0CC2-463A-A0F3-E3D590F21182}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

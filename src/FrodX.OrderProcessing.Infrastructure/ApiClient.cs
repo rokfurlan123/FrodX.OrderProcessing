@@ -1,0 +1,26 @@
+﻿using Newtonsoft.Json;
+
+namespace FrodX.OrderProcessing.Infrastructure
+{
+    public static class ApiClient
+    {
+        private static readonly HttpClient client = new HttpClient();
+
+        public static async Task<dynamic?> FetchApiData(string url)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode(); 
+                string content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<dynamic>(content);
+            }
+            catch (Exception ex)
+            {
+                //TODO
+                //log
+                return null;
+            }
+        }
+    }
+}
