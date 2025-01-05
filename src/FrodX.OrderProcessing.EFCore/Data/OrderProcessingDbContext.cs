@@ -8,11 +8,13 @@ public partial class OrderProcessingDbContext : DbContext
 {
     public OrderProcessingDbContext()
     {
+
     }
 
     public OrderProcessingDbContext(DbContextOptions<OrderProcessingDbContext> options)
         : base(options)
     {
+
     }
 
     public virtual DbSet<Order> Orders { get; set; }

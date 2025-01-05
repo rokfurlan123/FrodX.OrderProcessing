@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FrodX.OrderProcessing.EFCore.Data;
+using Newtonsoft.Json;
 
 namespace FrodX.OrderProcessing.Infrastructure
 {
@@ -6,14 +7,14 @@ namespace FrodX.OrderProcessing.Infrastructure
     {
         private static readonly HttpClient client = new HttpClient();
 
-        public static async Task<dynamic?> FetchApiData(string url)
+        public static async Task<List<Order>?> FetchApiData(string url)
         {
             try
             {
                 HttpResponseMessage response = await client.GetAsync(url);
                 response.EnsureSuccessStatusCode(); 
                 string content = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<dynamic>(content);
+                return JsonConvert.DeserializeObject<List<Order>>(content);
             }
             catch (Exception ex)
             {

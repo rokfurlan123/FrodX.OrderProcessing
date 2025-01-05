@@ -1,15 +1,12 @@
-using System.Collections.Specialized;
 using FrodX.OrderProcessing.EFCore.Data;
 using FrodX.OrderProcessing.Infrastructure.Repositories;
 using FrodX.OrderProcessing.Worker;
 using FrodX.OrderProcessing.Worker.Jobs;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
+using Quartz.Impl;
 
 var builder = Host.CreateApplicationBuilder(args);
-
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddHostedService<OrdersWorker>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -18,46 +15,47 @@ builder.Services.AddDbContext<OrderProcessingDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-NameValueCollection properties = new()
+IServiceCollection services;
+IServiceProvider provider;
+ISchedulerFactory schedulerFactory;
+IScheduler _scheduler;
+
+services = new ServiceCollection();
+schedulerFactory = new StdSchedulerFactory();
+_scheduler = await schedulerFactory.GetScheduler();
+
+//Register services for job factory
+services.AddTransient<OrdersServiceJob>();
+services.AddScoped<IOrderService, OrderService>();
+services.AddDbContext<OrderProcessingDbContext>(options =>
 {
-    ["quartz.jobStore.tablePrefix"] = "QRTZ_",
-};
+    options.UseSqlServer(connectionString);
+});
+provider = services.BuildServiceProvider();
 
-var scheduler = await SchedulerBuilder
-    .Create(properties)
-    .UseDefaultThreadPool(x => x.MaxConcurrency = 3)
-    .WithMisfireThreshold(TimeSpan.FromSeconds(10))
-    .UsePersistentStore(x =>
-    {
-        x.UseProperties = true;
-        x.UseSqlServer(connectionString!);
-        x.UseSystemTextJsonSerializer();
-        x.PerformSchemaValidation = true;
-    }).BuildScheduler();
+//.Net DI services 
+builder.Services.AddHostedService<OrdersWorker>();
 
-//not for production - only for demo project
-var previousJobKey = new JobKey(builder.Configuration.GetSection("JobConfiguration:Name").Value!);
-await scheduler.DeleteJob(previousJobKey);
+//Setup job factory
+_scheduler.JobFactory = new CustomJobFactory(provider);
+await _scheduler.Start();
 
-await scheduler.Start();
+IJobDetail job = JobBuilder.Create<OrdersServiceJob>()
+                            .UsingJobData("apiUrl", builder.Configuration.GetSection("ApiUrl").Value!)
+                            .UsingJobData("connectionString", connectionString)
+                            .WithIdentity(builder.Configuration.GetSection("JobConfiguration:Name").Value!)
+                            .StoreDurably()
+                            .RequestRecovery()
+                            .Build();
 
-var jobKey = new JobKey(builder.Configuration.GetSection("JobConfiguration:Name").Value!);
+ITrigger trigger = TriggerBuilder.Create()
+                                 .WithIdentity(builder.Configuration.GetSection("TriggerConfiguration:Name").Value!)
+                                 .StartNow()
+                                 .WithSimpleSchedule(z => z.WithIntervalInMinutes(builder.Configuration.GetValue<int>("JobInterval"))
+                                 .RepeatForever().WithMisfireHandlingInstructionIgnoreMisfires())
+                                 .Build();
 
-var jobTrigger = TriggerBuilder.Create()
-    .WithIdentity(builder.Configuration.GetSection("TriggerConfiguration:Name").Value!)
-    .ForJob(jobKey)
-    .StartAt(DateTimeOffset.Now)
-    .WithSimpleSchedule(x => x.WithIntervalInSeconds(builder.Configuration.GetValue<int>("JobMinuteInterval"))
-        .RepeatForever())
-    .Build();
-
-var jobDetail = JobBuilder
-    .Create<OrdersServiceJob>()
-    .WithIdentity(jobKey)
-    .StoreDurably()
-    .Build();
-
-await scheduler.ScheduleJob(jobDetail, jobTrigger);
+await _scheduler.ScheduleJob(job, trigger);
 
 var host = builder.Build();
 

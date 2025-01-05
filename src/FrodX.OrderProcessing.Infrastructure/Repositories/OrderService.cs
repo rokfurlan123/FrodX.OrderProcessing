@@ -1,5 +1,4 @@
-﻿using FrodX.OrderProcessing.EFCore;
-using FrodX.OrderProcessing.EFCore.Data;
+﻿using FrodX.OrderProcessing.EFCore.Data;
 
 namespace FrodX.OrderProcessing.Infrastructure.Repositories
 {
@@ -10,10 +9,31 @@ namespace FrodX.OrderProcessing.Infrastructure.Repositories
         {
             _context = context;
         }
-        public void InsertOrdersInDb(List<Order> orders)
+        public async Task ProcessOrders(string apiUrl, string connectionString)
+        {
+            var orders = await GetOrdersFromApi(apiUrl);
+
+            if(orders == null)
+            {
+                //log
+            }
+            else
+            {
+                InsertOrdersInDb(orders);
+            }    
+        }
+
+        private void InsertOrdersInDb(List<Order> orders)
         {
             _context.Orders.AddRange(orders);
             _context.SaveChanges();
         }
+
+        private async Task<List<Order>?> GetOrdersFromApi(string apiUrl)
+        {
+            return await ApiClient.FetchApiData(apiUrl);
+        }
+
+       
     }
 }
