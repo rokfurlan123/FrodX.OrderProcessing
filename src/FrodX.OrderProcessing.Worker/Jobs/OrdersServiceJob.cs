@@ -7,6 +7,7 @@ namespace FrodX.OrderProcessing.Worker.Jobs
     public class OrdersServiceJob : IJob
     {
         private readonly IServiceProvider _serviceProvider;
+
         public OrdersServiceJob(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
@@ -16,12 +17,10 @@ namespace FrodX.OrderProcessing.Worker.Jobs
         {
             using (var scope = _serviceProvider.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetService<OrderProcessingDbContext>();
                 var orderService = scope.ServiceProvider.GetService<IOrderService>();
                 if (orderService == null)
                 {
-                    //TODO
-                    //log
+                    
                 }
                 else
                 {

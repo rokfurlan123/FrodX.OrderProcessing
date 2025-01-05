@@ -3,12 +3,10 @@ namespace FrodX.OrderProcessing.Worker
     public class OrdersWorker : BackgroundService
     {
         private readonly ILogger<OrdersWorker> _logger;
-        private readonly IServiceProvider _serviceProvider;
 
-        public OrdersWorker(ILogger<OrdersWorker> logger, IServiceProvider serviceProvider)
+        public OrdersWorker(ILogger<OrdersWorker> logger)
         {
             _logger = logger;
-            _serviceProvider = serviceProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

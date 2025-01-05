@@ -16,10 +16,8 @@ namespace FrodX.OrderProcessing.Infrastructure
                 string content = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<List<Order>>(content);
             }
-            catch (Exception ex)
+            catch
             {
-                //TODO
-                //log
                 return null;
             }
         }

@@ -5,6 +5,7 @@ namespace FrodX.OrderProcessing.Infrastructure.Repositories
     public class OrderService : IOrderService
     {
         private readonly OrderProcessingDbContext _context;
+
         public OrderService(OrderProcessingDbContext context)
         {
             _context = context;
@@ -15,11 +16,19 @@ namespace FrodX.OrderProcessing.Infrastructure.Repositories
 
             if(orders == null)
             {
-                //log
+                Console.WriteLine("API hasn't fetched any orders");
             }
             else
             {
-                InsertOrdersInDb(orders);
+                try
+                {
+                    InsertOrdersInDb(orders);
+                    Console.WriteLine("Orders have been successfuly added to the database!");
+                }
+                catch(Exception ex) 
+                {
+                    Console.WriteLine($"{ex.Message}");
+                }
             }    
         }
 
@@ -33,7 +42,5 @@ namespace FrodX.OrderProcessing.Infrastructure.Repositories
         {
             return await ApiClient.FetchApiData(apiUrl);
         }
-
-       
     }
 }

@@ -20,9 +20,9 @@ namespace FrodX.OrderProcessing.Worker.Jobs
                 // injects dependencies
                 return (IJob)_serviceProvider.GetService(bundle.JobDetail.JobType)!;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new SchedulerException(string.Format("Can't instantiate a job", bundle.JobDetail.Key), e);
+                throw new SchedulerException(string.Format("Can't instantiate a job", bundle.JobDetail.Key), ex);
             }
         }
     }
